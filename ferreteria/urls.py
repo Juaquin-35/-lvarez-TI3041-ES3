@@ -26,4 +26,6 @@ urlpatterns = [
     # Reportes
     path('reportes/agrupacion/', views.reporte_agrupacion, name='reporte_agrupacion'),
     path('reportes/umbral/', views.reporte_umbral, name='reporte_umbral'),
+
+    path('contacto/', views.contacto_view, name='contacto'),
 ]

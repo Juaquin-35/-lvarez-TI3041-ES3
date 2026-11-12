@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Categoria, Producto
+from .models import Categoria, Producto, ConsultaCliente
+
 
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
@@ -14,3 +15,14 @@ class ProductoAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'categoria__nombre')
     # Filtro lateral por categoría
     list_filter = ('categoria',)
+
+@admin.register(ConsultaCliente)
+class ConsultaClienteAdmin(admin.ModelAdmin):
+    # Campos que se verán en el listado del panel de administración
+    list_display = ('nombre', 'correo', 'producto_interes', 'fecha')
+    # Campos por los que se podrá buscar en el panel de administración
+    search_fields = ('nombre', 'correo', 'mensaje')
+    # Filtro lateral por fecha de creación o producto de interés
+    list_filter = ('fecha', 'producto_interes')
+    # Hacer que la fecha sea de solo lectura por seguridad/historial
+    readonly_fields = ('fecha',)

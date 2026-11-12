@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import Producto, Categoria
-from .models import Producto
+from .forms import ConsultaClienteForm
 from .forms import ProductoForm
 from django.db.models import Count, Avg, Sum
 
@@ -156,3 +156,18 @@ def reporte_umbral(request):
     """Reporte 2: Listado de productos bajo un umbral de stock crítico (ej. stock <= 5)."""
     stock_critico = Producto.objects.filter(stock__lte=5).order_by('stock')
     return render(request, 'reporte_umbral.html', {'productos': stock_critico})
+
+def contacto_view(request):
+    # Uso de sesiones: contar visitas del usuario a esta sección
+    visitas = request.session.get('visitas_contacto', 0) + 1
+    request.session['visitas_contacto'] = visitas
+
+    if request.method == 'POST':
+        form = ConsultaClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'contacto_exito.html', {'visitas': visitas})
+    else:
+        form = ConsultaClienteForm()
+
+    return render(request, 'contacto.html', {'form': form, 'visitas': visitas})
