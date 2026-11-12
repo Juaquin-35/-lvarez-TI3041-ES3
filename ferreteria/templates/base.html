@@ -28,7 +28,7 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'ver_carrito' %}">Mi carrito</a></li>
                         {% if user.is_staff %}
-                            <li class="nav-item"><a class="nav-link" href="/admin">Administración</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'panel_administracion' %}">Administración</a></li>
                         {% endif %}
                         <li class="nav-item"><span class="nav-user">Hola, {{ user.username }}</span></li>
                         <li class="nav-item">

@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import Producto, Categoria
+from .models import Producto
+from .forms import ProductoForm
 
 # 1. Landing Page + Catálogo (Pública)
 def home(request):
@@ -102,3 +104,39 @@ def procesar_compra(request):
     request.session['carrito'] = {}
     messages.success(request, "¡Compra realizada con éxito! El stock ha sido actualizado.")
     return redirect('home')
+
+
+# 1. CREAR REGISTRO
+def producto_crear_web(request):
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirige al listado principal
+    else:
+        form = ProductoForm()
+    return render(request, 'producto_form.html', {'form': form, 'accion': 'Crear'})
+
+# 2. EDITAR REGISTRO EXISTENTE
+def producto_editar_web(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirige al listado principal
+    else:
+        form = ProductoForm(instance=producto)
+    return render(request, 'producto_form.html', {'form': form, 'accion': 'Editar'})
+
+# 3. ELIMINAR CON CONFIRMACIÓN
+def producto_eliminar_web(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('home')  # Redirige al listado principal
+    return render(request, 'producto_confirm_delete.html', {'producto': producto})
+
+def panel_administracion(request):
+    productos = Producto.objects.all()
+    return render(request, 'panel_admin.html', {'productos': productos})
