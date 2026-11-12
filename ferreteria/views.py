@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from .models import Producto, Categoria
 from .models import Producto
 from .forms import ProductoForm
+from django.db.models import Count, Avg, Sum
 
 # 1. Landing Page + Catálogo (Pública)
 def home(request):
@@ -140,3 +141,18 @@ def producto_eliminar_web(request, pk):
 def panel_administracion(request):
     productos = Producto.objects.all()
     return render(request, 'panel_admin.html', {'productos': productos})
+
+
+def reporte_agrupacion(request):
+    """Reporte 1: Resumen por categoría (cantidad, precio promedio y stock total)."""
+    reporte_categorias = Producto.objects.values('categoria').annotate(
+        total_productos=Count('id'),
+        precio_promedio=Avg('precio'),
+        stock_total=Sum('stock')
+    )
+    return render(request, 'reporte_agrupacion.html', {'reporte': reporte_categorias})
+
+def reporte_umbral(request):
+    """Reporte 2: Listado de productos bajo un umbral de stock crítico (ej. stock <= 5)."""
+    stock_critico = Producto.objects.filter(stock__lte=5).order_by('stock')
+    return render(request, 'reporte_umbral.html', {'productos': stock_critico})

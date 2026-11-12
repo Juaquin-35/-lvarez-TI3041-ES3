@@ -17,10 +17,13 @@ urlpatterns = [
     path('carrito/eliminar/<int:producto_id>/', views.eliminar_del_carrito, name='eliminar_del_carrito'),
     path('carrito/procesar/', views.procesar_compra, name='procesar_compra'),
 
-
+    # Administración CRUD en la web
     path('sitio/producto/nuevo/', views.producto_crear_web, name='producto_crear_web'),
     path('sitio/producto/editar/<int:pk>/', views.producto_editar_web, name='producto_editar_web'),
     path('sitio/producto/eliminar/<int:pk>/', views.producto_eliminar_web, name='producto_eliminar_web'),
-
     path('sitio/panel/', views.panel_administracion, name='panel_administracion'),
+
+    # Reportes
+    path('reportes/agrupacion/', views.reporte_agrupacion, name='reporte_agrupacion'),
+    path('reportes/umbral/', views.reporte_umbral, name='reporte_umbral'),
 ]
