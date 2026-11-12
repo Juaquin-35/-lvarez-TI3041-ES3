@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar sesión | Ferretería Pablito y el Clavito{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-card">
+        <p class="eyebrow">Qué bueno verte</p>
+        <h1>Inicia sesión</h1>
+        <p class="auth-intro">Accede a tu cuenta para continuar con tus compras.</p>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <p>
+                <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </p>
+            <p>
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </p>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="btn btn-primary btn-lg w-100">Ingresar</button>
+        </form>
+        <div class="auth-links">
+            <p>¿Todavía no tienes cuenta? <a href="{% url 'registro' %}">Regístrate</a></p>
+            <p><a href="{% url 'home' %}">Volver al catálogo</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

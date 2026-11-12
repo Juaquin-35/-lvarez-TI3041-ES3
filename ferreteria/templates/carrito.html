@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi carrito | Ferretería Pablito y el Clavito{% endblock %}
+
+{% block content %}
+<section class="container cart-wrap">
+    <div class="cart-heading">
+        <p class="eyebrow">Tu selección</p>
+        <h1>Mi carrito</h1>
+        <a href="{% url 'home' %}">← Seguir explorando el catálogo</a>
+    </div>
+
+    <div class="cart-card">
+        {% if carrito %}
+            <div class="table-responsive">
+                <table class="table align-middle cart-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Precio unitario</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Subtotal</th>
+                            <th scope="col"><span class="visually-hidden">Acción</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for id, item in carrito.items %}
+                        <tr>
+                            <td>{{ item.nombre }}</td>
+                            <td>${{ item.precio|floatformat:0 }}</td>
+                            <td>{{ item.cantidad }}</td>
+                            <td>${{ item.subtotal|floatformat:0 }}</td>
+                            <td><a href="{% url 'eliminar_del_carrito' id %}" class="btn btn-outline-danger btn-sm">Eliminar</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="cart-summary">
+                <p class="cart-total">Total: ${{ total|floatformat:0 }}</p>
+                <a href="{% url 'procesar_compra' %}" class="btn btn-accent btn-lg">Confirmar compra</a>
+            </div>
+        {% else %}
+            <div class="empty-cart">
+                <div class="product-placeholder mb-3" aria-hidden="true">🛒</div>
+                <h2>Tu carrito está esperando un proyecto.</h2>
+                <p>Aún no has agregado productos. Explora el catálogo y encuentra lo que necesitas.</p>
+                <a href="{% url 'home' %}#catalogo" class="btn btn-primary">Ir al catálogo</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

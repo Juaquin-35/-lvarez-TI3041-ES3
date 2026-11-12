@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear cuenta | Ferretería Pablito y el Clavito{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-card">
+        <p class="eyebrow">Únete a nuestra comunidad</p>
+        <h1>Crea tu cuenta</h1>
+        <p class="auth-intro">Regístrate para comprar y seguir tus proyectos desde un solo lugar.</p>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                    {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+                </p>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-lg w-100">Crear cuenta</button>
+        </form>
+        <div class="auth-links">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+            <p><a href="{% url 'home' %}">Volver al catálogo</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
